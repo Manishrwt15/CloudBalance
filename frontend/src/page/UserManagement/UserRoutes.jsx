@@ -7,7 +7,7 @@ import UserManagement from './UserManagement.jsx'
 
 const UserRoutes = () => {
   return (
-    <Route path="user" element={<UserManagement/>}> 
+    <Route path="user"  element={<UserManagement/>}> 
             <Route index element={<Table/>}/>
             <Route path="add" element={<AddUser/>}/>
             <Route path="edit" element={<EditUser/>}/>  

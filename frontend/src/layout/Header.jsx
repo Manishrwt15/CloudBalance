@@ -5,18 +5,23 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useDispatch } from 'react-redux';
+import {toggleSidebar} from '../store/actions/sidebarAction'
 
-const Header = ({sideBar,setSideBar}) => {
+const Header = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const handleOnclick = () => {
         localStorage.removeItem('loggedIn');
         navigate('/login');
     }
 
-    const handleMenuClick = () => {
-        setSideBar( !sideBar);
+    const handleToggle = () => {
+        dispatch(toggleSidebar());
     }
+
 
   return (
     <div className='flex justify-between items-center px-12 py-8 border-b border-gray-300 shadow-lg h-20'>
@@ -24,7 +29,7 @@ const Header = ({sideBar,setSideBar}) => {
             <img src={logo} alt="CloudKeeper" />
             <div className="menu flex items-center gap-8">
                 <div className="menu-icon text-blue-700">
-                    <button className='cursor-pointer' onClick={handleMenuClick}><MenuIcon /></button>
+                    <button className='cursor-pointer' onClick={handleToggle}><MenuIcon /></button>
                 </div>
                 <div className="dropdown flex flex-col">
                     <label htmlFor="tool" className='font-semibold'>Module</label>
@@ -48,10 +53,10 @@ const Header = ({sideBar,setSideBar}) => {
                     </div>
                 </div>
             </div>
-            <div className="logout-btn text-blue-700 flex items-center gap-2 border-2 border-blue-700 cursor-pointer shadow-md px-4 py-2 rounded-" >
+            <button className='text-md font-bold logout-btn text-blue-700 flex items-center gap-2 border-2 border-blue-700 cursor-pointer shadow-md px-4 py-2 rounded-md' onClick={handleOnclick}>
                 <LogoutIcon/>
-                <button className='cursor-pointer text-md font-bold' onClick={handleOnclick}>Logout</button>
-            </div>
+                Logout
+            </button>
         </div>
     </div>
   )

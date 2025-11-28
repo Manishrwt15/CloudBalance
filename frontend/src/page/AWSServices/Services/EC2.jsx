@@ -1,5 +1,5 @@
 import React from 'react'
-import resources from './index.js'
+import {resources} from './index.js'
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 

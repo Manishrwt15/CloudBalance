@@ -10,10 +10,13 @@ const Table = () => {
     const handleAddClick = () => {
         navigate('add')
     }
-
-    const handleEditClick = () => {
-        navigate('edit') 
+    
+    const handleEditClick = (row) => {
+        navigate('edit',{
+            state : {row}
+        })
     }
+
 
   return (
     <div className='mt-4'>
@@ -50,7 +53,7 @@ const Table = () => {
                                 ))
                                 }</td>
                                 <td className='p-2'>{user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never'}</td>
-                                <td className='p-2'><button onClick={handleEditClick} className='cursor-pointer'><EditIcon/></button></td>
+                                <td className='p-2'><button onClick={() => handleEditClick(user)} className='cursor-pointer'><EditIcon/></button></td>
                             </tr>
                         ))
                     }

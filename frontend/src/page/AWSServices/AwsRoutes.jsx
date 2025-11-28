@@ -8,7 +8,7 @@ import AWSServices from './AWSServices';
 const AwsRoutes = () => {
   return (
     <Route path="aws" element={<AWSServices />}>
-        <Route index element={<EC2 />} />
+        <Route path="ec2" element={<EC2 />} />
         <Route path="asg" element={<ASG />} />
         <Route path="rds" element={<RDS />} />
     </Route>
