@@ -3,11 +3,11 @@ import './App.css'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Login from './components/Login.jsx'
 import Dashboard from './components/Dashboard.jsx'
-import Protected from './components/Protected.jsx'
+import Protected from './routes/Protected.jsx'
 import Onboarding from './page/Onboarding/Onboarding.jsx'
 import CostExplorer from './page/CostExplorer/CostExplorer.jsx'
-import UserRoutes from './page/UserManagement/UserRoutes.jsx'
-import AwsRoutes from './page/AWSServices/AwsRoutes.jsx'
+import AwsRoutes from './routes/AwsRoutes.jsx'
+import UserRoutes from './routes/UserRoutes.jsx'
 
 function App() {
   

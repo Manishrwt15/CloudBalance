@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route } from 'react-router-dom';
-import EC2 from './Services/EC2'
-import ASG from './Services/ASG'
-import RDS from './Services/RDS'
-import AWSServices from './AWSServices';
+import EC2 from '../page/AWSServices/Services/EC2'
+import ASG from '../page/AWSServices/Services/ASG'
+import RDS from '../page/AWSServices/Services/RDS'
+import AWSServices from '../page/AWSServices/AWSServices';
 
 const AwsRoutes = () => {
   return (

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import AddUser from './Users/AddUser.jsx'
-import EditUser from './Users/EditUser.jsx'
-import Table from './Users/Table.jsx'
-import UserManagement from './UserManagement.jsx'
+import AddUser from '../page/UserManagement/Users/AddUser.jsx'
+import EditUser from '../page/UserManagement/Users/EditUser.jsx'
+import Table from '../page/UserManagement/Table.jsx'
+import UserManagement from '../page/UserManagement/UserManagement.jsx'
 
 const UserRoutes = () => {
   return (

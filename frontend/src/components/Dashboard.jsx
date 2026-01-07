@@ -1,16 +1,14 @@
 import React from 'react'
-import Header from '../layout/Header'
-import Sidebar from '../layout/Sidebar'
+import Header from './CommonLayout/Header'
+import Sidebar from './CommonLayout/Sidebar'
 import { Outlet } from 'react-router-dom'
 
 const Dashboard = () => {
-  const isAuthenticate = localStorage.getItem("loggedIn") === "true"; 
-
   return (
-    <div className='h-screen bg-gray-100 overflow-hidden'>
-        <Header/>
+    <div className=' bg-gray-100 h-screen overflow-hidden'>
+        <Header className=''/>
         <main className='flex'>
-            {isAuthenticate && <Sidebar />}
+            <Sidebar />
             <Outlet/>
         </main>
     </div>
