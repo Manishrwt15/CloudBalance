@@ -1,6 +1,8 @@
 import React,{useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import useUsers from '../../hook/useUsers';
+import AssignAcount from './AssignAcount';
+import { showError, showSuccess } from '../../utils/toast';
 
 
 const Form = ({data}) => {
@@ -16,8 +18,10 @@ const Form = ({data}) => {
         lastName : "",
         email : "",
         password : "",
-        role : ""
+        role : "",
+        accountIds :[]
     })
+    const [selectedAccounts, setSelectedAccounts] = useState([]);
 
     useEffect(() => {
         if(data){
@@ -28,7 +32,10 @@ const Form = ({data}) => {
                 email : data.email ?? "",
                 password : data.password ?? "",
                 role : data.role ?? "",
+                accountIds : data.accountIds ?? []
             });
+
+            setSelectedAccounts(data.accountIds ?? []);
         }
     },[data])
 
@@ -40,16 +47,32 @@ const Form = ({data}) => {
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
-        if(form.id){
-            await editUser(form.id,form);
-        } else {
-            const {...newUser} = form; 
-            await addUser(newUser);
+        if (form.role === 'CUSTOMER' && selectedAccounts.length === 0) {
+            alert('Customer must have at least one account assigned');
+            return;
         }
-        navigate(-1);
+
+        const userPayload = {
+                ...form,
+                accountIds: form.role === 'CUSTOMER' ? selectedAccounts : []
+        };
+
+        try {
+            if(isEdit){
+                await editUser(form.id, userPayload);
+                showSuccess('User updated successfully');
+            } else {
+                await addUser(userPayload);
+                showSuccess('User added successfully');
+            }
+            navigate(-1);
+        } catch (err) {
+            showError(err?.response?.data?.message)
+        }
     }
 
   return (
+
     <form className='mt-4 bg-white m-6 p-4 border border-gray-200 shadow-md rounded-md' onSubmit={handleSubmit}>
             <div className="flex gap-4 m-8">
                 <div className='flex flex-col gap-2'>
@@ -72,16 +95,19 @@ const Form = ({data}) => {
                 </div>}
                 <div className='flex flex-col gap-2'>
                     <label htmlFor="role">Selected Role</label>
-                    <select id="role" name="role" value={form.role} required className='border border-gray-200 rounded-md h-12 w-84 p-4 text-sm' onChange={handleChange}>
+                    <select id="role" name="role" value={form.role} required className='border border-gray-200 rounded-md h-12 w-84 px-4 text-sm' onChange={handleChange}>
                         <option value="" disabled>Select Role</option>
-                        <option value="admin">Admin</option>
-                        <option value="customer">Customer</option>
-                        <option value="read_only">Read Only</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="CUSTOMER">CUSTOMER</option>
+                        <option value="READ_ONLY">READ ONLY</option>
                     </select>
                 </div>
             </div>
-            <button type="submit" className='mx-8 border rounded-md bg-blue-700 text-white w-42 h-12 text-xl cursor-pointer'>{`${data?.id ? "Edit" : "Add" }`}</button>
-     </form>
+            {form.role === 'CUSTOMER' && <AssignAcount selectedAccounts={selectedAccounts} setSelectedAccounts={setSelectedAccounts} />}
+            <button type="submit" disabled={form.role === "CUSTOMER" && selectedAccounts.length === 0} className={`m-8 border rounded-md w-42 h-12 text-xl ${form.role === "CUSTOMER" && selectedAccounts.length === 0 ? "bg-gray-50 cursor-not-allowed" : "bg-blue-700 text-white"}`}>
+                {data?.id ? "Edit" : "Add"}
+            </button>
+    </form>
   )
 }
 

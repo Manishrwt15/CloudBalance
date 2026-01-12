@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useDispatch, useSelector } from 'react-redux';
 import {toggleSidebar} from '../../store/actions/sidebarAction'
 import { persistor } from '../../store/index';
+import {showSuccess} from '../../utils/toast';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Header = () => {
         localStorage.clear();
         persistor.purge();
         dispatch({ type: 'LOGOUT' });
+        showSuccess('Logged out successfully');
         navigate('/login');
     }
     

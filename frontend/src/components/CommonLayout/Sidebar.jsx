@@ -7,10 +7,10 @@ import RoomServiceIcon from '@mui/icons-material/RoomService';
 import { useSelector } from 'react-redux';
 
 const menuItems = [
-        { id: 1, name: 'User Management', icon : <ManageAccountsIcon />, link : 'user', roles : ['admin', 'readOnly'] },
-        { id: 2, name: 'Onboarding', icon : <ThumbsUpDownIcon /> , link : 'onboarding', roles : ['admin', 'readOnly'] },
-        { id : 3, name: 'Cost Explorer', icon : <LeaderboardIcon />, link : 'cost', roles : ['admin', 'readOnly', 'customer'] },
-        { id : 4, name: 'AWS Services', icon : <RoomServiceIcon />, link : 'aws', roles : ['admin', 'readOnly', 'customer'] },
+        { id: 1, name: 'User Management', icon : <ManageAccountsIcon />, link : 'user', roles : ['ADMIN', 'READ_ONLY'] },
+        { id: 2, name: 'Onboarding', icon : <ThumbsUpDownIcon /> , link : 'onboarding', roles : ['ADMIN', 'READ_ONLY'] },
+        { id : 3, name: 'Cost Explorer', icon : <LeaderboardIcon />, link : 'cost', roles : ['ADMIN', 'READ_ONLY', 'CUSTOMER'] },
+        { id : 4, name: 'AWS Services', icon : <RoomServiceIcon />, link : 'aws', roles : ['ADMIN', 'READ_ONLY', 'CUSTOMER'] },
 ];
 
 const Sidebar = () => {

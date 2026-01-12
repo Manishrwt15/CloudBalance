@@ -1,45 +1,34 @@
 import React,{useState} from "react";
-import Page1 from "./pages/Page1";
-import Page2 from "./pages/Page2";
-import Page3 from "./pages/Page3"
+import { stepsConfig } from "./utils/data";
+import "./style/index.css";
+import { useAccounts } from "../../hook/useAccounts";
+import { showSuccess } from "../../utils/toast";
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
+  const [isStepValid, setIsStepValid] = useState(false);
+  const [formData, setFormData] = useState({
+    arn: "",
+    accountId: "",
+    name: ""
+  });
 
-  const stepsConfig = {
-    1: {
-      title: "Create an IAM Role",
-      desc: "Create an IAM Role by following these steps",
-      component: <Page1 />
-    },
-    2: {
-      title: "Add Customer Managed Policies",
-      desc: "Create an Inline policy for the role by following these steps",
-      component: <Page2 />
-    },
-    3: {
-      title: "Create Cost & Usage Report",
-      desc: "Create a Cost & Usage Report by following these steps",
-      component: <Page3 />
-    }
-  };
+  const CurrentComponent = stepsConfig[step].component;
+  const {addAccount} = useAccounts();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < 3) {
       setStep(step + 1);
-    } else {
-      handleSubmit();
+      return;
     }
+    await addAccount(formData);
+    showSuccess("Account created successfully");
   };
 
   const handleBack = () => {
     if (step > 1) {
       setStep(step - 1);
     }
-  };
-
-  const handleSubmit = () => {
-    
   };
 
   return (
@@ -52,28 +41,17 @@ const Onboarding = () => {
               {stepsConfig[step].desc}
             </p>
           </div>
-          {stepsConfig[step].component}
+          <CurrentComponent onValidate={setIsStepValid} formData={formData} setFormData={setFormData} />
         </div>
       </main>
 
       <footer className="flex justify-between p-12">
-          <button className="bg-white text-blue-800 border border-blue-800 rounded-md px-4 py-2">
-            Cancel
-          </button>
-
+          <button className="btn">Cancel</button>
           <div className="flex gap-6">
             {step > 1 && (
-              <button
-                onClick={handleBack}
-                className="bg-white text-blue-800 border border-blue-800 rounded-md px-4 py-2">
-                Back
-              </button>
+              <button onClick={handleBack} className="btn">Back</button>
             )}
-            <button
-            onClick={handleNext}
-            className="bg-blue-800 text-white rounded-md px-4 py-2">
-              {step === 3 ? "Submit" : "Next"}
-            </button>
+            <button onClick={handleNext} className={`btn-next ${!isStepValid ? "opacity-50 cursor-not-allowed" : ""}`} disabled={!isStepValid}>{step === 3 ? "Submit" : "Next"}</button>
           </div>
         </footer>
     </div>

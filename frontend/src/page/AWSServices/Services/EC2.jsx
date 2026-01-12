@@ -1,6 +1,6 @@
 import React from 'react'
-import {resources} from '../index.js'
-import Table from '../Table.jsx'
+import {resources} from '../utils/index.js'
+import Table from '../utils/Table.jsx'
 
 const EC2 = () => {
 

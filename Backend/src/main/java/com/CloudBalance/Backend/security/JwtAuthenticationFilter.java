@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,12 +22,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserRepository repo;
     private final AuthUtil authUtil;
-    private final HandlerExceptionResolver handlerExceptionResolver;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/cloudbalance/signup") || path.startsWith("/cloudbalance/login");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-
-        try{
             final String requestTokenHeader = request.getHeader("Authorization");
             if(requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer")){
                 filterChain.doFilter(request, response);
@@ -41,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
                 User user = repo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not Found"));
 
-                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken= new UsernamePasswordAuthenticationToken(user, null, authorities);
 
@@ -49,11 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        } catch (Exception e) {
-            handlerExceptionResolver.resolveException(request, response, null, e);
-        }
-
     }
-
 
 }

@@ -3,7 +3,10 @@ package com.CloudBalance.Backend.Mapper;
 import com.CloudBalance.Backend.dto.UserCreateDTO;
 import com.CloudBalance.Backend.dto.UserResponseDTO;
 import com.CloudBalance.Backend.dto.UserUpdateDTO;
+import com.CloudBalance.Backend.model.Account;
 import com.CloudBalance.Backend.model.User;
+
+import java.util.stream.Collectors;
 
 
 public class UserMapper {
@@ -15,7 +18,8 @@ public class UserMapper {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getRole()
+                user.getRole().name(),
+                user.getAccounts().stream().map(Account :: getId).collect(Collectors.toList())
         );
     }
 

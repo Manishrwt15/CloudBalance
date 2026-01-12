@@ -1,4 +1,9 @@
 import axios from 'axios'
+import { persistor } from '../store/index';
+import { store } from '../store/index';
+import {showError} from './toast'
+const { dispatch } = store;
+
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8080',
@@ -17,6 +22,7 @@ axiosInstance.interceptors.request.use(config => {
 
   return config;
 }, error => {
+  showError("Request error. Please try again.");
   return Promise.reject(error);
 });
 
@@ -27,10 +33,11 @@ axiosInstance.interceptors.response.use(
       const status = error.response.status;
 
       if (status === 401 || status === 403) {
-        alert('Session expired. Please login again.');
-
+        showError("Session expired. Please log in again.");
         localStorage.clear();
-        window.location.href = 'cloudbalance/login';
+        persistor.purge();
+        dispatch({ type: 'LOGOUT' });
+        window.location.href = '/';
       }
     }
     return Promise.reject(error);

@@ -1,6 +1,6 @@
 import React from 'react'
-import {resources2} from '../index.js'
-import Table from '../Table.jsx'
+import {resources2} from '../utils/index.js'
+import Table from '../utils/Table.jsx'
 
 const RDS = () => {
   return (

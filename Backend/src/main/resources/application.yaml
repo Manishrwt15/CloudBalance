@@ -3,10 +3,21 @@ spring:
     name: Backend
 
   datasource:
-    url: jdbc:mysql://localhost:3306/cloudBalance?serverTimezone=UTC
-    username: clouduser
-    password: Cloud@123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    mysql:
+      hikari:
+        jdbc-url: jdbc:mysql://localhost:3306/cloudBalance?serverTimezone=UTC
+        username: clouduser
+        password: Cloud@123
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+    snowflake:
+      url: jdbc:snowflake://tagolxl-nu26032.snowflakecomputing.com
+      username: MANISHRWT15
+      password: Manishrawat@2001
+      driver-class-name: net.snowflake.client.jdbc.SnowflakeDriver
+      warehouse: CLOUDBALANCE_WH
+      database: CLOUDBALANCE_DB
+      schema: COST
 
   jpa:
     hibernate:

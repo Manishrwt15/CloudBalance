@@ -5,14 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponseDTO {
-    private long id;
+    private Long id;
 
     private String firstName;
 
@@ -21,4 +21,6 @@ public class UserResponseDTO {
     private String email;
 
     private String role;
+
+    private List<Long> accountIds;
 }

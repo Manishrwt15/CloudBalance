@@ -1,0 +1,15 @@
+.btn{
+    background-color: #ffffff;
+    color: #1e40af;  
+    border: 1px solid #1e40af;
+    border-radius: 6px;    
+    padding: 0.5rem 1rem;
+}
+
+.btn-next {
+  background-color: #1e40af; 
+  color: #ffffff;
+  border-radius: 6px;      
+  padding: 0.5rem 1rem;     
+  border: none;
+}

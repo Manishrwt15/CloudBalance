@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import {login} from '../api/authApi';
 import { useDispatch } from 'react-redux';
 import {loginSuccess} from '../store/actions/authActions';
+import { showSuccess, showError } from '../utils/toast';
 
 const Login = () => {
     
@@ -15,16 +16,16 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try{
-           const data = await login(email, password);
+            const data = await login(email, password);
             localStorage.setItem('authToken', data.jwt);
             dispatch(loginSuccess({name: data.name, role: data.role}));
 
-            const targetRoute = (data.role === 'admin' || data.role === 'readOnly') ? '/dashboard/user' : '/dashboard/cost';
+            const targetRoute = (data.role === 'ADMIN' || data.role === 'READ_ONLY') ? '/dashboard/user' : '/dashboard/cost';
+            showSuccess("Login successful!");
             navigate(targetRoute);
         }
         catch(err){
-            console.error('Login error:', err);
-            alert("Login Failed. Please check your credentials.");
+            showError(err.response.data.message || "Login failed. Please try again.");
         }
     }
     

@@ -4,6 +4,9 @@ import com.CloudBalance.Backend.dto.LoginRequestDTO;
 import com.CloudBalance.Backend.dto.LoginResponseDTO;
 import com.CloudBalance.Backend.dto.SignupRequestDTO;
 import com.CloudBalance.Backend.dto.SignupResponseDTO;
+import com.CloudBalance.Backend.exception.DuplicateResourceException;
+import com.CloudBalance.Backend.exception.ResourceNotFoundException;
+import com.CloudBalance.Backend.model.Role;
 import com.CloudBalance.Backend.model.User;
 import com.CloudBalance.Backend.config.PasswordConfig;
 import com.CloudBalance.Backend.repository.UserRepository;
@@ -37,10 +40,10 @@ public class AuthService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user  = repo.findByEmail(loginRequestDTO.getEmail()).orElseThrow(() -> new RuntimeException("User not Found"));
+        User user  = repo.findByEmail(loginRequestDTO.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User not Found"));
 
         String name = user.getFirstName() + " " + user.getLastName();
-        String role = user.getRole();
+        String role = user.getRole().name();
 
         String token = authUtil.generateAccessToken(userDetails.getUsername(), role);
 
@@ -50,7 +53,7 @@ public class AuthService {
     public SignupResponseDTO signup(SignupRequestDTO signupRequestDTO) {
 
         if (repo.findByEmail(signupRequestDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User already exists");
+            throw new DuplicateResourceException("User already exists");
         }
 
         User user = new User();
@@ -58,7 +61,7 @@ public class AuthService {
         user.setFirstName(signupRequestDTO.getFirstName());
         user.setLastName(signupRequestDTO.getLastName());
         user.setPassword(passwordConfig.passwordEncoder().encode(signupRequestDTO.getPassword()));
-        user.setRole(signupRequestDTO.getRole());
+        user.setRole(Role.ADMIN);
 
         user = repo.save(user);
 
@@ -66,7 +69,7 @@ public class AuthService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getRole()
+                user.getRole().name()
         );
     }
 

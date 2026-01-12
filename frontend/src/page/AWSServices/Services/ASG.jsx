@@ -1,6 +1,6 @@
 import React from 'react'
-import {resources3} from '../index'
-import Table from '../Table'
+import {resources3} from '../utils/index'
+import Table from '../utils/Table'
 
 const ASG = () => {
   

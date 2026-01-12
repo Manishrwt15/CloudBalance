@@ -41,9 +41,9 @@ const Table = () => {
             </thead>
 
             <tbody>
-              {users.map((user) => (
+              {users.map((user,index) => (
                 <tr key={user.id} className="border-b border-gray-100">
-                  <td className="p-2">{user.id}</td>
+                  <td className="p-2">{index + 1}</td>
                   <td className="p-2">{user.firstName}</td>
                   <td className="p-2">{user.lastName}</td>
                   <td className="p-2">{user.email}</td>
