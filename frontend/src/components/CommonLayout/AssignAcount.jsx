@@ -46,7 +46,7 @@ const AssignAcount = ({selectedAccounts, setSelectedAccounts}) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-80 text-gray-500 text-xl font-semibold">
-        Loading accounts...
+        Loading accounts
       </div>
     );
   }
@@ -115,8 +115,7 @@ const AssignAcount = ({selectedAccounts, setSelectedAccounts}) => {
                 return (
                   <label key={id} className="flex items-center gap-2 p-2 border-b text-sm">
                     <input type="checkbox" checked={selectedRight.includes(id)}
-                      onChange={(e) => setSelectedRight(prev => e.target.checked ? [...prev, id] : prev.filter(i => i !== id))}
-                    />
+                      onChange={(e) => setSelectedRight(prev => e.target.checked ? [...prev, id] : prev.filter(i => i !== id))}/>
                     {acc?.name} ({id})
                   </label>
                 );

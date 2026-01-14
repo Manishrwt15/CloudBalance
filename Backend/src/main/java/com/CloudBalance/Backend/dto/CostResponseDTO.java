@@ -3,6 +3,7 @@ package com.CloudBalance.Backend.dto;
 import jakarta.persistence.Column;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

@@ -45,6 +45,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests( auth -> auth
                         .requestMatchers("/cloudbalance/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
 

@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
-import { createAccount, getAccounts, getAccountDetails } from "../api/accountApi";
+import { useEffect, useState, useCallback } from "react";
+import { createAccount, getAccounts, getAccountDetails, getCustomerAccounts } from "../api/accountApi";
+import { useSelector } from "react-redux";
 
 export const useAccounts = () => {
 
     const [accounts, setAccounts] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const role = useSelector(state => state.auth.role);
 
-    const fetchAccounts = async () => {
+    const fetchAccounts = useCallback(async () => {
+        if (!role) return;
+
         try {
             setLoading(true);
-            const accounts = await getAccounts();
+            const accounts = role === "CUSTOMER" ? await getCustomerAccounts() : await getAccounts();
             setAccounts(accounts?.data|| []);
         } 
         catch (error) {
@@ -19,7 +23,7 @@ export const useAccounts = () => {
         finally {
             setLoading(false);  
         }
-    };
+    },[role]);
 
     const fetchAccountDetails = async (accountId) => {
         try{
@@ -45,9 +49,12 @@ export const useAccounts = () => {
         }
     };
 
+
     useEffect(() => {   
+        setAccounts([]);
         fetchAccounts();
-    }, []);
+        
+    }, [fetchAccounts]);
 
     return {
         fetchAccounts,

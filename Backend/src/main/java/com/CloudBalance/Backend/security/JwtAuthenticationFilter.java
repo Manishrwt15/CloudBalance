@@ -24,12 +24,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final AuthUtil authUtil;
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        return path.startsWith("/cloudbalance/signup") || path.startsWith("/cloudbalance/login");
-    }
-
-    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
             final String requestTokenHeader = request.getHeader("Authorization");
             if(requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer")){
@@ -45,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken= new UsernamePasswordAuthenticationToken(user, null, authorities);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken= new UsernamePasswordAuthenticationToken(email, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }

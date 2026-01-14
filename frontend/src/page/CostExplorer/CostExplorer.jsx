@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import WaterfallChartIcon from '@mui/icons-material/WaterfallChart'
@@ -7,13 +7,35 @@ import Filters from './utils/Filters'
 import GroupBy from './utils/GroupBy'
 import Table from './utils/Table'
 import Chart from './Chart'
+import { useCosts } from '../../hook/useCosts';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 
 const CostExplorer = () => {
+  const {costs, loading, error, fetchCosts } = useCosts();
 
   const [chartType, setChartType] = useState('mscolumn2d')
   const [filterIsOpen, setFilterIsOpen] = useState(false)
+  const [groupBy, setGroupBy] = useState('SERVICE');
+  const [filters, setFilters] = useState({});
+  const [startDate, setStartDate] = useState(dayjs('2025-01-01'));
+  const [endDate, setEndDate] = useState(dayjs('2025-05-01'));
 
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep','Oct', 'Nov', 'Dec'];
+
+  useEffect(() => {
+    const data = {
+      startDate: startDate.format('YYYY-MM-DD'),
+      endDate: endDate.format('YYYY-MM-DD'),
+      groupBy,
+      filters
+    };
+    console.log("data",data);
+    fetchCosts(data);
+  }, [groupBy, startDate, endDate, filters, fetchCosts]);
+
 
   return (
     <div className="w-full  bg-gray-200 p-7 h-[calc(100vh-70px)] overflow-y-auto">
@@ -25,25 +47,39 @@ const CostExplorer = () => {
       </div>
 
       <div className="border border-gray-100 rounded-md mt-6 p-6 bg-gray-100 flex items-center justify-between">
-          <GroupBy/>
+          <GroupBy selectedGroupBy={groupBy} setSelectedGroupBy={setGroupBy} costs={costs} loading={loading} error={error}/>
           <div className='flex items-center gap-8'>
             <div className="month flex items-center gap-4">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="start-month">Start Month</label>
-                <select name="start-month" id="start-month" className='border border-gray-400 rounded-md h-8 px-4' >
-                  {months.map((month,index) => (
-                    <option key={index} className=''>{month}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <label htmlFor="end-month">End Month</label>
-                <select name="end-month" id="end-month" className='border border-gray-400 rounded-md h-8 px-4'>
-                  {months.map((month,index) => (
-                    <option key={index} className=''>{month}</option>
-                  ))}
-                </select>
-              </div>
+
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="flex gap-2 w-80">
+                    <DatePicker
+                      value={startDate}
+                      onChange={(newValue) => setStartDate(newValue)}
+                      maxDate={endDate}
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          className: "bg-white rounded-md"
+                        }
+                      }}
+                    />
+
+                    <DatePicker
+                      value={endDate}
+                      onChange={(newValue) => setEndDate(newValue)}
+                      minDate={startDate}
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          className: "bg-white rounded-md"
+                        }
+                      }}
+                    />
+                </div>
+              </LocalizationProvider>
+
+
             </div>
             <button onClick={() => setFilterIsOpen(!filterIsOpen)} className={`px-3 py-2 border border-gray-400 rounded-md hover:bg-blue-700 hover:text-white transition ${filterIsOpen ? 'bg-blue-700 text-white' : ' '}`}>
               <TuneIcon />
@@ -71,10 +107,10 @@ const CostExplorer = () => {
 
         <main className="flex gap-6">
           <div className="flex-1 min-w-0">
-            <Chart chartType={chartType}/>
+            <Chart chartType={chartType} costs={costs} loading={loading} error={error}/>
           </div>
 
-          {filterIsOpen && <Filters/>}
+          {filterIsOpen && <Filters onChange={setFilters}/>}
         </main>
       </div>
 
@@ -82,7 +118,7 @@ const CostExplorer = () => {
         <p>We are showing top 1000 records by cost.</p>
       </div>
 
-      <Table/>
+      <Table costs={costs} loading={loading} error={error}/>
     </div>
   )
 }

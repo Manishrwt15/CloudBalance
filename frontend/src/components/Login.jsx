@@ -5,6 +5,7 @@ import {login} from '../api/authApi';
 import { useDispatch } from 'react-redux';
 import {loginSuccess} from '../store/actions/authActions';
 import { showSuccess, showError } from '../utils/toast';
+import {ROLES} from '../constants/roles'
 
 const Login = () => {
     
@@ -20,9 +21,9 @@ const Login = () => {
             localStorage.setItem('authToken', data.jwt);
             dispatch(loginSuccess({name: data.name, role: data.role}));
 
-            const targetRoute = (data.role === 'ADMIN' || data.role === 'READ_ONLY') ? '/dashboard/user' : '/dashboard/cost';
+            const targetRoute =[ROLES.ADMIN, ROLES.READONLY].includes(data.role)? "/dashboard/user": "/dashboard/cost";
             showSuccess("Login successful!");
-            navigate(targetRoute);
+            navigate(targetRoute, { replace: true });
         }
         catch(err){
             showError(err.response.data.message || "Login failed. Please try again.");

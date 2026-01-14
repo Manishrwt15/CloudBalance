@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,4 +41,13 @@ public class AccountController {
         AccountResponseDTO account = accountService.getAccountById(id);
         return ResponseEntity.ok(account);
     }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @GetMapping("/customer/accounts")
+    public ResponseEntity<List<AccountResponseDTO>> getCustomerAccounts(Authentication authentication) {
+        String email = authentication.getName();
+        List<AccountResponseDTO> accounts = accountService.getAccountsByCustomerEmail(email);
+        return ResponseEntity.ok(accounts);
+    }
+
 }

@@ -1,16 +1,17 @@
 package com.CloudBalance.Backend.service;
 
-import com.CloudBalance.Backend.dto.CostResponseDTO;
+import com.CloudBalance.Backend.dto.CostRequestDTO;
+import com.CloudBalance.Backend.dto.GroupByResponseDTO;
 import com.CloudBalance.Backend.repository.CostRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class CostServiceImpl implements CostService {
+public class CostServiceImpl implements  CostService{
 
     private final CostRepository costRepository;
 
@@ -18,22 +19,25 @@ public class CostServiceImpl implements CostService {
         this.costRepository = costRepository;
     }
 
+    private BigDecimal toBigDecimal(Object value) {
+        return value == null ? BigDecimal.ZERO : BigDecimal.valueOf(((Number) value).doubleValue());
+    }
+
+
     @Override
-    public List<CostResponseDTO> getServiceMonthlyCostTable() {
-        List<Map<String, Object>> raw = costRepository.getServiceMonthlyCost();
-        Map<String, CostResponseDTO> result = new LinkedHashMap<>();
+    public List<GroupByResponseDTO> getMonthlyCostByService(CostRequestDTO requestDTO) {
 
-        for (Map<String, Object> row : raw) {
-            String service = row.get("SERVICE").toString();
+        List<Map<String, Object>> rows = costRepository.fetchMonthlyCost(requestDTO.getStartDate(), requestDTO.getEndDate(), requestDTO.getGroupBy(), requestDTO.getFilters());
+
+        LinkedHashMap<String, LinkedHashMap<String, BigDecimal>> serviceMap = new LinkedHashMap<>();
+        for (Map<String, Object> row : rows) {
             String month = row.get("MONTH").toString();
-            Double cost = ((Number) row.get("TOTAL_COST")).doubleValue();
+            String groupKey = row.get("GROUP_KEY").toString();
+            BigDecimal cost = toBigDecimal(row.get("TOTAL_COST"));
 
-            result.putIfAbsent(service, new CostResponseDTO());
-            CostResponseDTO dto = result.get(service);
-            dto.setService(service);
-            dto.getMonthlyCost().put(month, cost);
+            serviceMap.computeIfAbsent(groupKey, k -> new LinkedHashMap<>()).put(month, cost);
         }
 
-        return new ArrayList<>(result.values());
+        return serviceMap.entrySet().stream().map(e -> new GroupByResponseDTO(e.getKey(), e.getValue())).toList();
     }
 }

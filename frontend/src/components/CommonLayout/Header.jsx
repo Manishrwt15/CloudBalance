@@ -9,11 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import {toggleSidebar} from '../../store/actions/sidebarAction'
 import { persistor } from '../../store/index';
 import {showSuccess} from '../../utils/toast';
+import {useAccounts} from '../../hook/useAccounts'
 
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const name = useSelector(state => state.auth.name);
     const role = useSelector(state => state.auth.role);
+
+    const { accounts, loading } = useAccounts();
+
 
 
     const handleLogout = () => {
@@ -29,7 +34,7 @@ const Header = () => {
     }
 
     const handleBtn = () => {
-        {(role === 'admin' || role === 'readOnly') ? navigate('/dashboard/user') : navigate('/dashboard/cost')}
+        {(role === 'ADMIN' || role === 'READ_ONLY') ? navigate('/dashboard/user') : navigate('/dashboard/cost')}
     }
 
 
@@ -43,13 +48,24 @@ const Header = () => {
                 <div className="menu-icon text-blue-700">
                     <button className='cursor-pointer' onClick={handleToggle}><MenuIcon /></button>
                 </div>
-                <div className="dropdown flex flex-col">
-                    <label htmlFor="tool" className='font-semibold'>Module</label>
-                    <select name="" id="tool" className=''>
-                        <option value="Lens">Lens</option>
-                        <option value="Tuner">Tuner</option>
+                {role == 'CUSTOMER' && 
+                 <div className="dropdown flex flex-col">
+                    <label htmlFor="tool" className="font-semibold pl-1">
+                        Accounts
+                    </label>
+
+                    <select id="tool" className="rounded py-1">
+                        <option value="">
+                            {loading ? 'Loading accounts...' : 'Select Account'}
+                        </option>
+
+                        {accounts.map(account => (
+                            <option key={account.id} value={account.id}>
+                                {account.name}
+                            </option>
+                        ))}
                     </select>
-                </div>
+                </div>}
             </div>
         </div>
         <div className="profile order-last flex items-center gap-8">
@@ -60,7 +76,7 @@ const Header = () => {
                 <div className="profile-name flex flex-col">
                     <p className='text-xs'>Welcome</p>
                     <div className="name flex items-center gap-2 text-blue-700">
-                        <h1 className='text-lg'>{useSelector(state => state.auth.name)}</h1>
+                        <h1 className='text-lg'>{name}</h1>
                         <ErrorOutlineIcon/>
                     </div>
                 </div>

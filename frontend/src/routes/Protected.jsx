@@ -1,14 +1,18 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const Protected = ({children}) => {
-    const isLoggedIn = localStorage.getItem('authToken') ? true : false;
+const Protected = ({ allowedRoles }) => {
+  const role = useSelector(state => state.auth.role);
+  const isLoggedIn = localStorage.getItem('authToken');
 
-    if(!isLoggedIn){
-        return <Navigate to="/login" replace />
-    }
-    
-  return children;
-}
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
 
-export default Protected
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return <Outlet />;
+};
+
+export default Protected;

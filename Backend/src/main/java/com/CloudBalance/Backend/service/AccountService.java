@@ -12,4 +12,5 @@ public interface AccountService {
     AccountResponseDTO getAccountById(Long id);
 
     List<AccountResponseDTO> getAllAccounts();
+    List<AccountResponseDTO> getAccountsByCustomerEmail(String email);
 }

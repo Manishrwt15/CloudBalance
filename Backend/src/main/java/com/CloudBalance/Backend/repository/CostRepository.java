@@ -1,38 +1,47 @@
 package com.CloudBalance.Backend.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
+@RequiredArgsConstructor
 public class CostRepository {
+    private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    @Qualifier("snowflakeJdbcTemplate")
-    private JdbcTemplate jdbcTemplate;
+    public List<Map<String, Object>> fetchMonthlyCost(String startDate, String endDate, String groupBy, Map<String, List<String>> filters) {
+        StringBuilder sql = new StringBuilder("""
+            SELECT 
+                TO_VARCHAR(DATE_TRUNC('MONTH', BILL_DATE), 'YYYY-MM') AS MONTH,
+                %s AS GROUP_KEY,
+                SUM(COST) AS TOTAL_COST
+            FROM COST_REPORT
+            WHERE BILL_DATE BETWEEN ? AND ?
+        """.formatted(groupBy));
 
-    public List<Map<String, Object>> getServiceMonthlyCost() {
+        List<Object> params = new ArrayList<>();
+        params.add(startDate);
+        params.add(endDate);
 
-        jdbcTemplate.execute("USE WAREHOUSE CLOUDBALANCE_WH");
-        jdbcTemplate.execute("USE DATABASE CLOUDBALANCE_DB");
-        jdbcTemplate.execute("USE SCHEMA COST");
+        if (filters != null && !filters.isEmpty()) {
+            filters.forEach((column, values) -> {
+                if (values != null && !values.isEmpty()) {
+                    sql.append(" AND ").append(column).append(" IN (");
+                    sql.append(values.stream().map(v -> "?").collect(Collectors.joining(",")));
+                    sql.append(") ");
+                    params.addAll(values);
+                }
+            });
+        }
 
+        sql.append(" GROUP BY MONTH, ").append(groupBy).append(" ORDER BY MONTH");
 
-        String sql = """
-            SELECT
-              SERVICE,
-              TO_VARCHAR(USAGE_DATE, 'YYYY-MM') AS MONTH,
-              SUM(COST) AS TOTAL_COST
-            FROM CLOUDBALANCE_DB.COST.AWS_COSTS
-            WHERE USAGE_DATE >= DATEADD(MONTH, -6, CURRENT_DATE)
-            GROUP BY SERVICE, MONTH
-            ORDER BY SERVICE, MONTH
-        """;
-
-        return jdbcTemplate.queryForList(sql);
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
+
 }

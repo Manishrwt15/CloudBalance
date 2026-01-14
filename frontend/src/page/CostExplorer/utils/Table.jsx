@@ -1,8 +1,5 @@
 import React from 'react'
-import { useCosts } from '../../../hook/useCosts';
-const Table = () => {
-
-    const {costs,loading,error} =  useCosts();
+const Table = ({costs, loading, error}) => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading data.</p>;
@@ -12,7 +9,7 @@ const Table = () => {
     const formatUSD = value =>
     `$${value.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 
-    const formattedCosts = costs.map(item => ({service: item.service, prices: months.map(month => item.monthlyCost[month] || 0)}));
+    const formattedCosts = costs.map(item => ({service: item.groupKey, prices: months.map(month => item.monthlyCost[month] || 0)}));
 
     const getServiceTotal = prices => prices.reduce((sum, p) => sum + p, 0);
     const getMonthTotal = monthIndex => formattedCosts.reduce((sum, service) => sum + service.prices[monthIndex], 0);

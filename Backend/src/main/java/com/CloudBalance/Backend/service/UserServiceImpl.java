@@ -57,12 +57,9 @@ public class UserServiceImpl implements UserService{
         User user = UserMapper.fromCreateDTO(userDTO);
         user.setPassword(passwordConfig.passwordEncoder().encode(userDTO.getPassword()));
 
-        if(userDTO.getRole() == CUSTOMER &&
-                userDTO.getAccountIds() != null &&
-                !userDTO.getAccountIds().isEmpty()) {
+        if(userDTO.getRole() == CUSTOMER && userDTO.getAccountIds() != null && !userDTO.getAccountIds().isEmpty()) {
 
-            List<Account> accounts =
-                    accountRepository.findAllById(userDTO.getAccountIds());
+            List<Account> accounts = accountRepository.findAllById(userDTO.getAccountIds());
 
             if (accounts.size() != userDTO.getAccountIds().size()) {
                 throw new IllegalArgumentException("One or more Account IDs are invalid");

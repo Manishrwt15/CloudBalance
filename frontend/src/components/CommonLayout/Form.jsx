@@ -9,6 +9,7 @@ const Form = ({data}) => {
 
     const navigate = useNavigate();
     const {addUser, editUser} = useUsers();
+    const [selectedAccounts, setSelectedAccounts] = useState([]);
 
     const isEdit = Boolean(data?.id);
 
@@ -21,7 +22,7 @@ const Form = ({data}) => {
         role : "",
         accountIds :[]
     })
-    const [selectedAccounts, setSelectedAccounts] = useState([]);
+    
 
     useEffect(() => {
         if(data){
@@ -52,10 +53,7 @@ const Form = ({data}) => {
             return;
         }
 
-        const userPayload = {
-                ...form,
-                accountIds: form.role === 'CUSTOMER' ? selectedAccounts : []
-        };
+        const userPayload = {...form, accountIds: form.role === 'CUSTOMER' ? selectedAccounts : []};
 
         try {
             if(isEdit){

@@ -1,6 +1,5 @@
 import axiosInstance from "../utils/axiosInstance";
 
-
-export const getCosts = () => {
-  return  axiosInstance.get("/dashboard/costs");
+export const getCosts = (data) => {
+  return axiosInstance.post("/dashboard/grouped", data);
 }

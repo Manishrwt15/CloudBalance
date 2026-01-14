@@ -12,5 +12,9 @@ const getAccountDetails = async (accountId) => {
     return axiosInstance.get(`/dashboard/account/${accountId}`);
 };
 
-export { createAccount, getAccounts, getAccountDetails};
+const getCustomerAccounts = async () => {
+  return axiosInstance.get('/dashboard/customer/accounts');
+};
+
+export { createAccount, getAccounts, getAccountDetails, getCustomerAccounts};
 

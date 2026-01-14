@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 const menuItems = [
         { id: 1, name: 'User Management', icon : <ManageAccountsIcon />, link : 'user', roles : ['ADMIN', 'READ_ONLY'] },
-        { id: 2, name: 'Onboarding', icon : <ThumbsUpDownIcon /> , link : 'onboarding', roles : ['ADMIN', 'READ_ONLY'] },
+        { id: 2, name: 'Onboarding', icon : <ThumbsUpDownIcon /> , link : 'onboarding', roles : ['ADMIN'] },
         { id : 3, name: 'Cost Explorer', icon : <LeaderboardIcon />, link : 'cost', roles : ['ADMIN', 'READ_ONLY', 'CUSTOMER'] },
         { id : 4, name: 'AWS Services', icon : <RoomServiceIcon />, link : 'aws', roles : ['ADMIN', 'READ_ONLY', 'CUSTOMER'] },
 ];

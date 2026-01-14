@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useState, useCallback} from 'react';
 import {getCosts} from '../api/costApi';
 
 export const useCosts =  () => {
@@ -7,22 +7,17 @@ export const useCosts =  () => {
     const [loading, setLoading] =  useState(false);
     const [error, setError] =  useState(null);
 
-    const fetchCosts = async () => {
+    const fetchCosts = useCallback(async (data) => {
         try {
-            setLoading(true);
-            const costs = await getCosts();
-            setCosts(costs?.data || []);
-        } 
-        catch (error) {
-            setError(error);
+        setLoading(true);
+        setError(null);
+        const response = await getCosts(data);
+        setCosts(response.data);
+        } catch (err) {
+        setError(err);
+        } finally {
+        setLoading(false);
         }
-        finally {
-            setLoading(false);  
-        }
-    };
-
-    useEffect(() => {   
-        fetchCosts();
     }, []);
 
     return {

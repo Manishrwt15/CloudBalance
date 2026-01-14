@@ -31,8 +31,9 @@ axiosInstance.interceptors.response.use(
   error => {
     if (error.response) {
       const status = error.response.status;
+      const message = error.response.data?.message || "";
 
-      if (status === 401 || status === 403) {
+      if (status === 401 || status === 403 || message.includes("JWT expired")) {
         showError("Session expired. Please log in again.");
         localStorage.clear();
         persistor.purge();
