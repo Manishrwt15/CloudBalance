@@ -19,9 +19,10 @@ const Login = () => {
         try{
             const data = await login(email, password);
             localStorage.setItem('authToken', data.jwt);
+            localStorage.setItem('role',data.role);
             dispatch(loginSuccess({name: data.name, role: data.role}));
 
-            const targetRoute =[ROLES.ADMIN, ROLES.READONLY].includes(data.role)? "/dashboard/user": "/dashboard/cost";
+            const targetRoute =[ROLES.ADMIN, ROLES.READONLY].includes(data.role) ? "/dashboard/user": "/dashboard/cost";
             showSuccess("Login successful!");
             navigate(targetRoute, { replace: true });
         }

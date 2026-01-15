@@ -59,11 +59,11 @@ function App() {
           </Route>
         </Route>
 
-        {/* Catch all */}
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </Router>
-  );
+  )
+
 }
 
 export default App;

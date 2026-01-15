@@ -27,4 +27,6 @@ public class CostRequestDTO {
 
     private Map<String, List<String>> filters;
 
+    private String accountId;
+
 }

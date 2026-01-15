@@ -1,6 +1,7 @@
 import { combineReducers, createStore } from "redux";
 import sidebarReducer from "./reducers/sidebarReducer";
 import authReducer from "./reducers/authReducer";
+import accountReducer from "./reducers/accountReducer";
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -16,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers ({
     sidebar : sidebarReducer,
     auth : authReducer,
+    account : accountReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

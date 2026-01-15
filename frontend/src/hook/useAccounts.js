@@ -3,7 +3,6 @@ import { createAccount, getAccounts, getAccountDetails, getCustomerAccounts } fr
 import { useSelector } from "react-redux";
 
 export const useAccounts = () => {
-
     const [accounts, setAccounts] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
@@ -51,10 +50,11 @@ export const useAccounts = () => {
 
 
     useEffect(() => {   
+        if (role !== 'ADMIN' && role !== 'CUSTOMER') return;
         setAccounts([]);
         fetchAccounts();
         
-    }, [fetchAccounts]);
+    }, [role, fetchAccounts]);
 
     return {
         fetchAccounts,

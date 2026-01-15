@@ -21,6 +21,7 @@ public class AccountMapper {
         accountResponseDTO.setId(entity.getId());
         accountResponseDTO.setArn(entity.getArn());
         accountResponseDTO.setName(entity.getName());
+        accountResponseDTO.setAccountId(entity.getAccountId());
 
         return accountResponseDTO;
     }

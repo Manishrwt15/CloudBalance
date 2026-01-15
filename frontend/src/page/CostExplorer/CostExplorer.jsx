@@ -12,6 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
+import { useSelector} from 'react-redux';
 
 
 const CostExplorer = () => {
@@ -23,17 +24,19 @@ const CostExplorer = () => {
   const [filters, setFilters] = useState({});
   const [startDate, setStartDate] = useState(dayjs('2025-01-01'));
   const [endDate, setEndDate] = useState(dayjs('2025-05-01'));
-
+  const selectedAccount = useSelector(state => state.account.selectedAccount);
 
   useEffect(() => {
     const data = {
       startDate: startDate.format('YYYY-MM-DD'),
       endDate: endDate.format('YYYY-MM-DD'),
       groupBy,
-      filters
+      filters,
+      accountId: selectedAccount || undefined
     };
     fetchCosts(data);
-  }, [groupBy, startDate, endDate, filters, fetchCosts]);
+  }, [groupBy, startDate, endDate, filters, selectedAccount, fetchCosts]);
+
 
 
   return (

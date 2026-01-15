@@ -10,16 +10,19 @@ import {toggleSidebar} from '../../store/actions/sidebarAction'
 import { persistor } from '../../store/index';
 import {showSuccess} from '../../utils/toast';
 import {useAccounts} from '../../hook/useAccounts'
+import { setSelectedAccount } from '../../store/actions/accountActions';
+
 
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const name = useSelector(state => state.auth.name);
     const role = useSelector(state => state.auth.role);
+    const selectedAccount = useSelector(state => state.account.selectedAccount);
 
     const { accounts, loading } = useAccounts();
-
-
+    const firstAccountId = accounts.length > 0 ? accounts[0].accountId : "";
+    
 
     const handleLogout = () => {
         localStorage.clear();
@@ -37,7 +40,6 @@ const Header = () => {
         {(role === 'ADMIN' || role === 'READ_ONLY') ? navigate('/dashboard/user') : navigate('/dashboard/cost')}
     }
 
-
   return (
     <div className='flex justify-between items-center px-12 py-8 border-b border-gray-300 shadow-lg h-20'>
         <div className="logo order-first flex items-center gap-18 justify-center">
@@ -54,13 +56,13 @@ const Header = () => {
                         Accounts
                     </label>
 
-                    <select id="tool" className="rounded py-1">
+                    <select id="tool" className="rounded py-1" value={selectedAccount || firstAccountId} onChange={(e) => dispatch(setSelectedAccount(e.target.value))}>
                         <option value="">
                             {loading ? 'Loading accounts...' : 'Select Account'}
                         </option>
 
                         {accounts.map(account => (
-                            <option key={account.id} value={account.id}>
+                            <option key={account.accountId} value={account.accountId}>
                                 {account.name}
                             </option>
                         ))}

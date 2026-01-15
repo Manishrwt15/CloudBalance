@@ -27,7 +27,7 @@ public class CostServiceImpl implements  CostService{
     @Override
     public List<GroupByResponseDTO> getMonthlyCostByService(CostRequestDTO requestDTO) {
 
-        List<Map<String, Object>> rows = costRepository.fetchMonthlyCost(requestDTO.getStartDate(), requestDTO.getEndDate(), requestDTO.getGroupBy(), requestDTO.getFilters());
+        List<Map<String, Object>> rows = costRepository.fetchMonthlyCost(requestDTO.getStartDate(), requestDTO.getEndDate(), requestDTO.getGroupBy(), requestDTO.getFilters(), requestDTO.getAccountId());
 
         LinkedHashMap<String, LinkedHashMap<String, BigDecimal>> serviceMap = new LinkedHashMap<>();
         for (Map<String, Object> row : rows) {

@@ -2,7 +2,7 @@ import React from 'react'
 
 const GroupBy = ({ selectedGroupBy, setSelectedGroupBy }) => {
 
-    const groupByOptions = ['Service','Instance Type','Account ID', 'Usage Type', 'Platform', 'REGION']
+    const groupByOptions = ['Service','Instance Type','Usage Type', 'Platform', 'REGION']
 
     const handleSelect = (option) => {
      setSelectedGroupBy(option.toUpperCase().replace(' ', '_')); 

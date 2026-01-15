@@ -33,12 +33,15 @@ axiosInstance.interceptors.response.use(
       const status = error.response.status;
       const message = error.response.data?.message || "";
 
-      if (status === 401 || status === 403 || message.includes("JWT expired")) {
+      if (status === 401 || message.includes("JWT expired")) {
         showError("Session expired. Please log in again.");
-        localStorage.clear();
+        localStorage.removeItem('authToken'); 
         persistor.purge();
         dispatch({ type: 'LOGOUT' });
         window.location.href = '/';
+      }
+      else if (status === 403) {
+        showError("Access Denied! You don't have permission for this action.");
       }
     }
     return Promise.reject(error);

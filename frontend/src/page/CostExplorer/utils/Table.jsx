@@ -3,6 +3,7 @@ const Table = ({costs, loading, error}) => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading data.</p>;
+    console.log("costs",costs);
 
     const months = Object.keys(costs[0]?.monthlyCost || {});
 

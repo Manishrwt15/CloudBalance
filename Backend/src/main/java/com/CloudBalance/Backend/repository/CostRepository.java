@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class CostRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Map<String, Object>> fetchMonthlyCost(String startDate, String endDate, String groupBy, Map<String, List<String>> filters) {
+    public List<Map<String, Object>> fetchMonthlyCost(String startDate, String endDate, String groupBy, Map<String, List<String>> filters,  String accountId) {
         StringBuilder sql = new StringBuilder("""
             SELECT 
                 TO_VARCHAR(DATE_TRUNC('MONTH', BILL_DATE), 'YYYY-MM') AS MONTH,
@@ -27,6 +27,11 @@ public class CostRepository {
         List<Object> params = new ArrayList<>();
         params.add(startDate);
         params.add(endDate);
+
+        if (accountId != null && !accountId.isEmpty()) {
+            sql.append(" AND ACCOUNT_ID = ? ");
+            params.add(accountId);
+        }
 
         if (filters != null && !filters.isEmpty()) {
             filters.forEach((column, values) -> {
