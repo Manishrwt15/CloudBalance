@@ -32,7 +32,6 @@ const CostExplorer = () => {
       groupBy,
       filters
     };
-    console.log("data",data);
     fetchCosts(data);
   }, [groupBy, startDate, endDate, filters, fetchCosts]);
 

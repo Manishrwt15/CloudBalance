@@ -1,7 +1,6 @@
 package com.CloudBalance.Backend.controller;
 
 import com.CloudBalance.Backend.dto.CostRequestDTO;
-import com.CloudBalance.Backend.dto.CostResponseDTO;
 import com.CloudBalance.Backend.dto.GroupByResponseDTO;
 import com.CloudBalance.Backend.service.CostService;
 import jakarta.validation.Valid;

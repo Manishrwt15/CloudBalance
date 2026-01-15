@@ -68,7 +68,7 @@ const Form = ({data}) => {
             showError(err?.response?.data?.message)
         }
     }
-
+    
   return (
 
     <form className='mt-4 bg-white m-6 p-4 border border-gray-200 shadow-md rounded-md' onSubmit={handleSubmit}>
@@ -102,7 +102,7 @@ const Form = ({data}) => {
                 </div>
             </div>
             {form.role === 'CUSTOMER' && <AssignAcount selectedAccounts={selectedAccounts} setSelectedAccounts={setSelectedAccounts} />}
-            <button type="submit" disabled={form.role === "CUSTOMER" && selectedAccounts.length === 0} className={`m-8 border rounded-md w-42 h-12 text-xl ${form.role === "CUSTOMER" && selectedAccounts.length === 0 ? "bg-gray-50 cursor-not-allowed" : "bg-blue-700 text-white"}`}>
+            <button type="submit" disabled={form.role === "CUSTOMER" && selectedAccounts.length === 0} className={`m-8 border rounded-md w-42 h-12 text-xl`}>
                 {data?.id ? "Edit" : "Add"}
             </button>
     </form>

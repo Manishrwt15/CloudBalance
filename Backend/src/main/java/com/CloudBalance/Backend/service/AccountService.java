@@ -10,7 +10,6 @@ import java.util.List;
 public interface AccountService {
     AccountResponseDTO createAccount(AccountCreateDTO account);
     AccountResponseDTO getAccountById(Long id);
-
     List<AccountResponseDTO> getAllAccounts();
     List<AccountResponseDTO> getAccountsByCustomerEmail(String email);
 }

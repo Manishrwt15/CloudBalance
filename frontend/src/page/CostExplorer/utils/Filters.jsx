@@ -5,6 +5,11 @@ const FILTER_DATA = {
   Service: ["AWS Lambda", "Amazon DynamoDB", "Amazon EC2", "Amazon RDS", "Amazon Redshift", "Amazon S3"],
   Instance_Type: ["c5.large","c5.xlarge","db.t3.large","db.t3.medium","db.t3.micro","db.t3.small","db.t4g.medium","m5.large","t3.large","t3.medium"],
   Region: ["ap-south-1","us-east-2","us-west-2"],
+  Usage_Type : ["BoxUsage:c5.large", "BoxUsage:c5.xlarge", "BoxUsage:m5.large", "BoxUsage:t3.large", "BoxUsage:t3.medium", "BoxUsage:t3.micro", "BoxUsage:t3.nano"],
+  Platform : ["Linux", "MySQL", "PostgreSQL"],
+  Purchase_Option : ["OnDemand", "Reserved", "SavingsPlan"],
+  Api_Operation : ["CreateCluster","CreateDBInstance", "CreateTable", "DeleteDBInstance", "DeleteItem", "DeleteObject", "GetItem"],
+  Resource : ["dynamodb-table-1", "dynamodb-table-2", "dynamodb-table-3", "dynamodb-table-4", "dynamodb-table-5", "dynamodb-table-6", "dynamodb-table-7"]
 };
 
 const Filters = ({ onChange }) => {

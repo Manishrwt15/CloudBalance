@@ -6,7 +6,6 @@ import com.CloudBalance.Backend.dto.UserCreateDTO;
 import com.CloudBalance.Backend.dto.UserResponseDTO;
 import com.CloudBalance.Backend.dto.UserUpdateDTO;
 import com.CloudBalance.Backend.exception.DuplicateResourceException;
-import com.CloudBalance.Backend.exception.ResourceNotFoundException;
 import com.CloudBalance.Backend.model.Account;
 import com.CloudBalance.Backend.repository.AccountRepository;
 import com.CloudBalance.Backend.repository.UserRepository;
@@ -104,12 +103,5 @@ public class UserServiceImpl implements UserService{
 
         User saved = repo.save(user);
         return UserMapper.toResponseDTO(saved);
-    }
-
-    @Override
-    public UserResponseDTO getUserById(Long id) {
-        User user =  repo.findById(id)
-                     .orElseThrow(() -> new ResourceNotFoundException("User not found with" + id));
-        return UserMapper.toResponseDTO(user);
     }
 }

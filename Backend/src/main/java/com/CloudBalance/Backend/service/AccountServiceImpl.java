@@ -9,14 +9,12 @@ import com.CloudBalance.Backend.model.Account;
 import com.CloudBalance.Backend.model.User;
 import com.CloudBalance.Backend.repository.AccountRepository;
 import com.CloudBalance.Backend.repository.UserRepository;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.CloudBalance.Backend.model.Role.CUSTOMER;
 
 @Service
 public class AccountServiceImpl implements AccountService{
