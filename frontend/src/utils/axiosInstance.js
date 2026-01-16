@@ -27,18 +27,19 @@ axiosInstance.interceptors.request.use(config => {
 });
 
 axiosInstance.interceptors.response.use(
+
   response => response,
   error => {
+  const token = localStorage.getItem('authToken');
+
     if (error.response) {
       const status = error.response.status;
-      const message = error.response.data?.message || "";
 
-      if (status === 401 || message.includes("JWT expired")) {
-        showError("Session expired. Please log in again.");
+      if (status === 401){
+        token != null && showError("Session expired. Please log in again.");
         localStorage.removeItem('authToken'); 
         persistor.purge();
         dispatch({ type: 'LOGOUT' });
-        window.location.href = '/';
       }
       else if (status === 403) {
         showError("Access Denied! You don't have permission for this action.");

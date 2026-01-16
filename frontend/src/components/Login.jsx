@@ -16,12 +16,16 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!email.trim() || !password.trim()) {
+            showError("Fields are empty");
+            return;
+        }
+
         try{
             const data = await login(email, password);
             localStorage.setItem('authToken', data.jwt);
             localStorage.setItem('role',data.role);
             dispatch(loginSuccess({name: data.name, role: data.role}));
-
             const targetRoute =[ROLES.ADMIN, ROLES.READONLY].includes(data.role) ? "/dashboard/user": "/dashboard/cost";
             showSuccess("Login successful!");
             navigate(targetRoute, { replace: true });
